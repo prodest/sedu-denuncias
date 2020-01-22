@@ -4,93 +4,100 @@
 
 {% block content-body %}
 
+{% load crispy_forms_tags %}
+
 <div class="col-md-12">
     <div class="card">
         <div class="card-header">
             <h4 class="card-title">
-                {% if request.resolver_match.url_name == "web_reclamacao_create" %}Criar nova reclamação{% endif %}
-                {% if request.resolver_match.url_name == "web_reclamacao_update" %}Atualizar reclamação{% endif %}
+                Criar nova reclamação
             </h4>
         </div>
         <div class="card-body">
-            <form  method="post">
+            
+            <form id="form" method="post" data-rotas-url="{% url 'ajax_load_rotas' %}">
                 {% csrf_token %}
                 <div class="row">
-                    <div class="col-md-6 pr-1">
+                    <div class="col-md-12">
                         <div class="form-group">
-                            <label>{{form.protocolo.html_name | title}}</label>
-                            {% if request.resolver_match.url_name == "web_reclamacao_update" %}
-                                <input type="text" class="form-control" name="{{form.protocolo.html_name}}" value="{{form.protocolo.value}}" disabled>
-                            {% else %}
-                                <input type="text" class="form-control" name="{{form.protocolo.html_name}}" disabled>
-                            {% endif %}
-                        </div>
-                    </div>
-                    <div class="col-md-6 pl-1">
-                        <div class="form-group">
-                            <label>{{form.aluno.html_name | title}}</label>
-                            <div class="form-control"> {{form.aluno}} </div>
+                            <label>Aluno*</label>
+                            <select class="form-control" name="aluno" id="id_aluno">
+                                <option value="">---------</option>
+                                {% for aluno in alunos%}
+                                    <option value={{aluno.id}}>{{aluno}}</opion>
+                                {% endfor %}
+                            </select>
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-6 pr-1">
                         <div class="form-group">
-                            <label>{{form.reclamante.html_name | title}}</label>
-                            <div class="form-control"> {{form.reclamante}} </div>
+                            <div> {{form.reclamante | as_crispy_field}} </div>
                         </div>
                     </div>
                     <div class="col-md-6 pl-1">
                         <div class="form-group">
-                            <label>{{form.agencia_transporte.html_name | title}}</label>
-                            <div class="form-control"> {{form.agencia_transporte}} </div>
+                            <div> {{form.agencia_transporte | as_crispy_field}} </div>
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-6 pr-1">
                         <div class="form-group">
-                            <label>{{form.tipo.html_name | title}}</label>
-                            <div class="form-control"> {{form.tipo}} </div>
+                            <div> {{form.tipo | as_crispy_field}} </div>
                         </div>
                     </div>
                     <div class="col-md-6 pl-1">
                         <div class="form-group">
-                            <label>{{form.cod_linha.html_name | title}}</label>
-                            {% if request.resolver_match.url_name == "web_reclamacao_update" %}
-                                <input type="text" class="form-control" name="{{form.cod_linha.html_name}}" value="{{form.cod_linha.value}}">
-                            {% else %}
-                                <input type="text" class="form-control" name="{{form.cod_linha.html_name}}">
-                            {% endif %}
+                            <div>{{form.outro_tipo | as_crispy_field}}</div>
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-6 pr-1">
                         <div class="form-group">
-                            <label>{{form.status.html_name | title}}</label>
-                            <div class="form-control"> {{form.status}} </div>
+                            <div>{{form.placa_veiculo | as_crispy_field}}</div>
                         </div>
                     </div>
                     <div class="col-md-6 pl-1">
                         <div class="form-group">
-                            <label>{{form.data_ocorrido.html_name | title}}</label>
-                            {% if request.resolver_match.url_name == "web_reclamacao_update" %}
-                                <input type="date" class="form-control" name="{{form.data_ocorrido.html_name}}" value="{{form.data_ocorrido.value}}">
-                            {% else %}
-                                <input type="date" class="form-control" name="{{form.data_ocorrido.html_name}}">
-                            {% endif %}
+                            <label>Data do ocorrido*</label>
+                            <div><input class="form-control" name="data_ocorrido" type="date" required></div>
                         </div>
                     </div>
                 </div>
                 <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label>{{form.texto.html_name | title}}</label>
-                                <textarea id="textoForm" class="form-control textarea" name="{{form.texto.html_name}}">{% if request.resolver_match.url_name == "web_reclamacao_update" %}{{form.texto.value}}{% endif %}</textarea>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Rota*</label>
+                            <div>
+                                <select class="form-control" name="rota" id="id_rota" required>
+                                    <option value="">---------</option>
+                                </select>
                             </div>
                         </div>
                     </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 pr-1">
+                        <div class="form-group">
+                            <div>{{form.papel | as_crispy_field}}</div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 pl-1">
+                        <div class="form-group">
+                            <div>{{form.outro_papel | as_crispy_field}}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <div>{{form.texto | as_crispy_field}}</div>
+                        </div>
+                    </div>
+                </div>
                 <div class="row">
                     <div class="update ml-auto mr-auto">
                         <button class="btn btn-primary btn-round" type="submit">Enviar</button>
@@ -100,5 +107,29 @@
             </div>
         </div>
 </div>
+
+<script>
+
+    $(document).ready(function() {
+        $('#id_aluno').select2();
+        $('#id_reclamante').select2();
+        $('#id_rota').select2();
+    });
+
+    $("#id_aluno").change(function() {
+        var url = $("#form").attr("data-rotas-url");
+        var alunoId = $(this).val();
+        $.ajax({                       
+        url: url,                    
+            data: {
+                'alunoId': alunoId     
+            },
+            success: function (data) { 
+                $("#id_rota").html(data);
+            }
+        });
+    })
+
+</script>
 {% endblock %}
 

@@ -5,21 +5,18 @@ from rest_framework.urlpatterns import format_suffix_patterns
 
 router = routers.SimpleRouter()
 
-router.register(r'sres', SREViewSet)
-router.register(r'municipios', MunicipioViewSet)
-router.register(r'escolas', EscolaViewSet)
-router.register(r'agencias_transporte', AgenciaTransporteViewSet)
-router.register(r'alunos', AlunoViewSet)
-router.register(r'reclamantes', ReclamanteViewSet)
-router.register(r'reclamacao_status', ReclamacaoStatusViewSet)
-router.register(r'reclamacoes', ReclamacaoViewSet)
-router.register(r'responsaveis', ResponsavelViewSet)
-router.register(r'comentarios', ComentarioViewSet)
-router.register(r'tipo_reclamacao', TipoReclamacaoViewSet)
-#router.register(r'mensagem', ReclamacaoAPIViewSet.as_view(), base_name='mensagem')
-
 urlpatterns = [
-    path('mensagem', ReclamacaoAPIViewSet.as_view()),
+    path('reclamacao', ReclamacaoAPIViewSet.as_view()),
+    path('reclamante/<uuid:pk>/reclamacoes', ReclamanteAPIViewSet.as_view()),
+    path('escola/<int:pk>/rotas', RotasEscolaAPIViewSet.as_view()),
+    path('municipios', MunicipioAPIViewSet.as_view()),
+    path('escolas', EscolaAPIViewSet.as_view()),
+    path('tipos', TiposReclamacaoAPIViewSet.as_view()),
+    path('reclamante/papeis', PapelAPIViewSet.as_view()),
+    path('rotas/turnos', TurnoAPIViewSet.as_view()),
+    path('reclamacao/status', StatusAPIViewSet.as_view()),
+    path('reclamacao/<int:pk>/parecer', ParecerFinalAPIViewSet.as_view()),
+
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

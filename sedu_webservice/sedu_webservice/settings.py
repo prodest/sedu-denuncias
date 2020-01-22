@@ -12,52 +12,30 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 import os
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '4n87k3=50^i#$*2)=#-akhg!f5+7v_(pmm-lw^3v4)zd=0!3+b'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
 ALLOWED_HOSTS = ['*']
 
 DB_NAME = os.getenv('DB_NAME')
 DB_HOST = os.getenv('DB_HOST')
 DB_USERNAME = os.getenv('DB_USERNAME')
 DB_PASSWORD = os.getenv('DB_PASSWORD')
+PATH_PRODUCTION = os.getenv('PATH_PRODUCTION')
 
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/2.2/howto/static-files/
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-# Application definition
+if (PATH_PRODUCTION == 'sedu'):
+    STATIC_URL = '/sedu/static/'
+    STATICFILES_DIRS = [
+        os.path.join(BASE_DIR, 'static'),
+    ]
+    
+else:
+    STATIC_URL = '/static/'
+    STATICFILES_DIRS = [
+        os.path.join(BASE_DIR, 'static'),
+    ]
 
-INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'denuncias',
-    'rest_framework',
-    'drf_yasg',
-]
-
-MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-]
-
-ROOT_URLCONF = 'sedu_webservice.urls'
 
 TEMPLATES = [
     {
@@ -74,6 +52,60 @@ TEMPLATES = [
         },
     },
 ]
+LOGIN_REDIRECT_URL = 'home'
+LOGOUT_REDIRECT_URL = 'home'
+
+
+
+# Quick-start development settings - unsuitable for production
+# See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
+
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = '4n87k3=50^i#$*2)=#-akhg!f5+7v_(pmm-lw^3v4)zd=0!3+b'
+
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = True
+
+
+# Application definition
+
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'denuncias',
+    'rest_framework',
+    'drf_yasg',
+    'crispy_forms',
+    'corsheaders'
+]
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.security.SecurityMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
+
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True
+CORS_ORIGIN_WHITELIST = [
+    'http://localhost:8100',
+]
+CORS_ORIGIN_REGEX_WHITELIST = [
+    'http://localhost:8100',
+]
+
+ROOT_URLCONF = 'sedu_webservice.urls'
 
 TEMPLATE_LOADERS = (
     'django.template.loaders.app_directories.load_template_source',
@@ -130,13 +162,3 @@ USE_L10N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/2.2/howto/static-files/
-
-STATIC_URL = '/static/'
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
-] 
-
-LOGIN_REDIRECT_URL = 'home'
-LOGOUT_REDIRECT_URL = 'home'
